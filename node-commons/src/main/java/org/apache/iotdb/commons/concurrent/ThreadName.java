@@ -336,6 +336,38 @@ public enum ThreadName {
   }
 
   public static DataNodeThreadModule getDataNodeModuleTheThreadBelongs(String givenThreadName) {
+    Set<ThreadName>[] threadNameSetList =
+        new Set[] {
+          queryThreadNames,
+          mppThreadNames,
+          compactionThreadNames,
+          walThreadNames,
+          flushThreadNames,
+          schemaEngineThreadNames,
+          clientServiceThreadNames,
+          iotConsensusThrreadNames,
+          ratisThreadNames,
+          computeThreadNames,
+          jvmThreadNames,
+          metricsThreadNames,
+          otherThreadNames
+        };
+    DataNodeThreadModule[] modules =
+        new DataNodeThreadModule[] {
+          DataNodeThreadModule.QUERY,
+          DataNodeThreadModule.MPP,
+          DataNodeThreadModule.COMPACTION,
+          DataNodeThreadModule.WAL,
+          DataNodeThreadModule.FLUSH,
+          DataNodeThreadModule.SCHEMA_ENGINE,
+          DataNodeThreadModule.CLIENT_SERVICE,
+          DataNodeThreadModule.IOT_CONSENSUS,
+          DataNodeThreadModule.RATIS_CONSENSUS,
+          DataNodeThreadModule.COMPUTE,
+          DataNodeThreadModule.JVM,
+          DataNodeThreadModule.METRICS,
+          DataNodeThreadModule.OTHER
+        };
     for (int i = 0, length = modules.length; i < length; ++i) {
       if (matchModuleWithThreadNames(threadNameSetList[i], modules[i], givenThreadName) != null) {
         return modules[i];
