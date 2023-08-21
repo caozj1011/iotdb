@@ -36,6 +36,7 @@ public interface TsFileFlushPolicy {
     @Override
     public void apply(DataRegion dataRegion, TsFileProcessor tsFileProcessor, boolean isSeq) {
       if (tsFileProcessor.shouldClose()) {
+        // 一定会走到这里，shouldClose中的fileSizeThreshold为0且不可改
         dataRegion.asyncCloseOneTsFileProcessor(isSeq, tsFileProcessor);
       } else {
         tsFileProcessor.asyncFlush();
