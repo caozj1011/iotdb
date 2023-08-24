@@ -174,8 +174,8 @@ public class InnerSpaceCompactionTask extends AbstractCompactionTask {
         performer.setSummary(summary);
         performer.perform();
 
-        CompactionUtils.updateProgressIndex(
-            targetTsFileList, selectedTsFileResourceList, Collections.emptyList());
+//        CompactionUtils.updateProgressIndex(
+//            targetTsFileList, selectedTsFileResourceList, Collections.emptyList());
         CompactionUtils.moveTargetFile(
             targetTsFileList, true, storageGroupName + "-" + dataRegionId);
 
