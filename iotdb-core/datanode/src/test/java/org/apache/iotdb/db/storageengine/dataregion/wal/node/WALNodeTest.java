@@ -41,6 +41,7 @@ import org.apache.iotdb.tsfile.utils.Binary;
 import org.apache.iotdb.tsfile.utils.BitMap;
 import org.apache.iotdb.tsfile.write.schema.MeasurementSchema;
 
+import org.awaitility.Awaitility;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -250,6 +251,8 @@ public class WALNodeTest {
     for (Future<Void> future : futures) {
       future.get();
     }
+    walNode.rollWALFile();
+    Awaitility.await().until(() -> walNode.isAllWALEntriesConsumed());
     executorService.shutdown();
     // recover info from checkpoint file
     Map<Long, MemTableInfo> actualMemTableId2Info =
@@ -276,6 +279,7 @@ public class WALNodeTest {
     }
     walNode.onMemTableFlushed(memTable);
     walNode.onMemTableCreated(new PrimitiveMemTable(databasePath, dataRegionId), tsFilePath);
+    Awaitility.await().until(() -> walNode.isAllWALEntriesConsumed());
     // check existence of _0-0-0.wal file and _1-0-1.wal file
     assertTrue(
         new File(

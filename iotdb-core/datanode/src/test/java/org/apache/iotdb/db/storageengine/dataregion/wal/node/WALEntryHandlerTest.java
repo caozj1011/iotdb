@@ -106,6 +106,7 @@ public class WALEntryHandlerTest {
         walNode1.log(
             memTable.getMemTableId(), getInsertRowNode(devicePath, System.currentTimeMillis()));
     walNode1.onMemTableFlushed(memTable);
+    Awaitility.await().until(() -> walNode1.isAllWALEntriesConsumed());
     // pin flushed memTable
     WALEntryHandler handler = flushListener.getWalEntryHandler();
     handler.pinMemTable();
@@ -166,6 +167,7 @@ public class WALEntryHandlerTest {
     handler.pinMemTable();
     handler.pinMemTable();
     walNode1.onMemTableFlushed(memTable);
+    Awaitility.await().until(() -> walNode1.isAllWALEntriesConsumed());
     // unpin 1
     CheckpointManager checkpointManager = walNode1.getCheckpointManager();
     handler.unpinMemTable();
